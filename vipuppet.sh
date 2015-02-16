@@ -33,13 +33,15 @@ while [[ true ]]; do
 	${PUPPET} parser validate ${FILE}
 
 	if [[ $? -ne 0 ]]; then
+	
+		# loop to get user input
 		while [[ true ]]; do
-			echo -en "\nEdit again[Y/n]: "
+			echo -en "Edit again[Y/n]: "
 			read input
 			case ${input} in
 				Y|y) break ;;
 				n|N) exit 1;;
-				*) echo "Invalid options" ;;
+				*) echo -ne "Invalid options, " ;;
 			esac
 		done
 	else
