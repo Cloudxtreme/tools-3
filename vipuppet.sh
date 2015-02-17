@@ -1,8 +1,9 @@
 #!/bin/bash
 #
-# Simple script to edit a puppet file 
-# and run a puppet validate syntax before 
-# close the new manifest.
+#     After write a lot of puppet class and manifest, type the command
+# to validate the syntax was becoming a little annoying. 
+#     I Develop this little script to do that for me.
+# 
 #
 # By: Rafael Silva - (Copyleft)
 # Date: Seg Fev 16 14:48:32 BRST 2015
