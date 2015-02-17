@@ -1,6 +1,6 @@
 #!/bin/bash
 #
-#     After write a lot of puppet class and manifest, type the command
+#     After write a lot of puppet manifest, type the command
 # to validate the syntax was becoming a little annoying. 
 #     I Develop this little script to do that for me.
 # 
