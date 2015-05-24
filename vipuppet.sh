@@ -1,13 +1,17 @@
 #!/bin/bash
 #
-#     After write a lot of puppet manifest, type the command
+# After write a lot of puppet's manifest, type the command
 # to validate the syntax was becoming a little annoying. 
-#     I Develop this little script to do that for me.
+# So, I develop this little script to do that for me.
 # 
+#
+# You can use the variable EDITOR on Shell to especify a
+# linux command-line text editor. If the variables is not
+# defined, will be use 'vi' as the default. 
 #
 # By: Rafael Silva - (Copyleft)
 # Date: Seg Fev 16 14:48:32 BRST 2015
-##
+
 FILE=${1}
 PUPPET=$(which puppet)
 
@@ -26,10 +30,16 @@ else
 	BIN=vi
 fi
 
+# check whether the puppet command is installed
+if [ ! ${PUPPET} ]; then
+	echo "Could not find the puppet command."
+	exit 2
+fi
+
 # main loop
 while [[ true ]]; do
 	${BIN} ${FILE}
-	
+
 	# check the puppet syntax
 	${PUPPET} parser validate ${FILE}
 
@@ -45,7 +55,6 @@ while [[ true ]]; do
 				*) echo -ne "Invalid options, " ;;
 			esac
 		done
-	else
-		break;
+	else break
 	fi
 done
