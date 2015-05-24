@@ -9,8 +9,8 @@
 # linux command-line text editor. If the variables is not
 # defined, will be use 'vi' as the default. 
 #
-# To installed this command only, copy or move the binary
-# to any directories listed on the PATH variables. 
+# To installed this command only copy or move this file
+# to any directory listed on the PATH variables. 
 #
 # By: Rafael Silva - (Copyleft)
 # Date: Seg Fev 16 14:48:32 BRST 2015
