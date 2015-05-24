@@ -30,7 +30,7 @@ else
 	BIN=vi
 fi
 
-# check whether the puppet command is installed
+# TODO: comment what this code does
 if [ ! ${PUPPET} ]; then
 	echo "Could not find the puppet command."
 	exit 2
