@@ -1,0 +1,106 @@
+#!/bin/bash
+#
+# By: Rafael Oliveira Silva - (C) Wed Jan 28 12:44:36 BRST 2015
+
+# Using a file as output
+if [ $1 ]; then
+    OUTFILE=$1
+fi
+# GLOBAL VARIABLES
+IFACES=$(ifconfig -a | egrep -oh "^[A-Za-z]+[0-9]")
+THOST="www.4linux.com.br"
+# try to find a network interface with connections
+for interface in $IFACES; do
+    ping -c1 -w1 $THOST -I $interface > /dev/null 2>&1
+    if [ $? -eq 0 ]; then
+        DEVICE=$interface
+        break
+    fi
+done
+# exit if could not find internet connection on the interfaces
+if [ ! $DEVICE ]; then
+    echo 'Could not find internet connection on any interfaces'
+    exit 1
+fi
+# Identify the network and netmask
+NETINFO=$(ip addr show dev $DEVICE | egrep -oh "([0-9]{1,3}[\.]){1,3}[0-9]{1,3}[\/][0-9]{1,2}")
+ADDRESS=$(echo $NETINFO | awk -F'/' '{print $1}')
+NETMASK=$(echo $NETINFO | awk -F'/' '{print $2}')
+# display some information before running the host founder
+if [ $OUTFILE ]; then
+    # send some properties to files
+    echo "# Properties: Interface: $DEVICE  Network: $ADDRESS  Netmask: $NETMASK" > $OUTFILE
+else
+    clear
+    echo -e "Network Specifications: \n"
+    echo -e "\tFound link on: $DEVICE"
+    echo -e "\tNetwork Mask: $NETMASK"
+    echo -e "\tLocal Network Address: $ADDRESS\n"
+    unset DEVICE NETINFO
+fi
+# Does the user whether or not to continue to run the script
+read -p 'Press <enter> to continue: ' buffer
+# Identify the Network type
+NODE_RANGE=$(seq 1 254)
+case $NETMASK in
+
+    # Class A Network (net.hosts.hosts.hosts)
+    8)  network=$(echo $ADDRESS | awk -F'.' '{ print $1 }')
+        for nodex in $NODE_RANGE; do
+            for nodey in $NODE_RANGE; do
+                for nodez in $NODE_RANGE; do
+                    node=$network.$nodex.$nodey.$nodez
+                    ping -c1 -w1 $node > /dev/null 2>&1
+                    if [ $? -eq 0 ]; then
+                        # OUTFILE on the file or STDOUT
+                        if [ $OUTFILE ]; then
+                          echo "$node" >> $OUTFILE
+                        else
+                            echo "$node   [ UP ]"
+                        fi
+                    fi
+                done
+            done
+        done
+        ;;
+
+    # Class B Network (net.net.hosts.hosts)
+    16) network=$(echo $ADDRESS | awk -F'.' '{ print $1.$2 }')
+        for nodex in $NODE_RANGE; do
+            for nodey in $NODE_RANGE; do
+                node=$network.$nodex.$nodey
+                ping -c1 -w1 $node > /dev/null 2>&1
+                if [ $? -eq 0 ]; then
+                    if [ $OUTFILE ]; then
+                        echo $node >> $OUTFILE
+                    else
+                        echo "$node   [ UP ]"
+                    fi
+                fi
+            done
+        done
+        ;;
+
+    # Class C Network (net.net.net.hosts)
+    24) network=$(echo $ADDRESS | awk -F'.' '{ print $1.$2.$3 }')
+        for nodex in $NODE_RANGE; do
+            node=$network.$nodex
+            ping -c1 -w1 $node > /dev/null 2>&1
+            if [ $? -eq 0 ]; then
+                if [ $OUTFILE ]; then
+                    echo $node >> $OUTFILE
+                else
+                    echo "$node  [ UP ]"
+                fi
+            fi
+        done
+        ;;
+
+    # Default environment
+    *)  echo "This software doesn't support this network $NETMASK"
+        exit 1
+        ;;
+esac
+# that's all folks
+echo -e "\nBye...\n"
+exit 0
