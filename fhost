@@ -7,7 +7,7 @@ if [ $1 ]; then
     OUTFILE=$1
 fi
 # GLOBAL VARIABLES
-IFACES=$(ifconfig -a | egrep -oh "^[A-Za-z]+[0-9]")
+IFACES=$(ifconfig -a | egrep -oh "^([A-Za-z]+[0-9]){1,}")
 THOST="www.4linux.com.br"
 # try to find a network interface with connections
 for interface in $IFACES; do
