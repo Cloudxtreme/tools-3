@@ -1,5 +1,12 @@
 #!/bin/bash
 #
+# Software to find computer on your network, that responde to ICMP request. 
+#
+# You don't need to specify the network or the network class. The script try
+# to identify you network mask and then send an ICMP request to all valid addresses.
+#
+# OBS: THe script only identify network class A(8), B(16) and C(24)
+#
 # By: Rafael Oliveira Silva - (C) Wed Jan 28 12:44:36 BRST 2015
 
 # Using a file as output
